@@ -1,5 +1,4 @@
 version: "2.4"
-
 services:
   frontend:
     build:
@@ -39,7 +38,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=app_db
     volumes:
-      - /mnt/ebs:/var/lib/postgresql/data   # <-- direktni mount na EBS volumen
+      - db_data:/var/lib/postgresql/data
     networks:
       - app-network
     healthcheck:
@@ -47,6 +46,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/db_data/postgresql
 
 networks:
   app-network:
