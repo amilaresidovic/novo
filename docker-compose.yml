@@ -3,6 +3,7 @@ services:
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
@@ -11,10 +12,10 @@ services:
       - app-network
     depends_on:
       - backend
-
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     volumes:
@@ -29,7 +30,6 @@ services:
       db:
         condition: service_healthy
     command: flask run --host=0.0.0.0 --port=5000
-
   db:
     image: postgres:15
     restart: always
@@ -46,7 +46,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
 volumes:
   db_data:
     driver: local
@@ -54,7 +53,6 @@ volumes:
       type: none
       o: bind
       device: /mnt/db_data/postgresql
-
 networks:
   app-network:
     driver: bridge
